@@ -1,3 +1,4 @@
+import java.io.*;
 import java.net.Socket;
 
 /**
@@ -7,9 +8,11 @@ import java.net.Socket;
 
 public class ClientHandlerController implements Runnable{
     Socket socket;
+    BufferedReader bufferedReader;
 
-    public ClientHandlerController(Socket socket) {
+    public ClientHandlerController(Socket socket) throws IOException {
         this.socket = socket;
+        this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
     }
 
     @Override
