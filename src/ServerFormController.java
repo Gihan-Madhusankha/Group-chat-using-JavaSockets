@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.Socket;
 
 /**
  * @author : Gihan Madhusankha
@@ -13,6 +14,11 @@ public class ServerFormController {
         try {
             ServerSocket serverSocket = new ServerSocket(8000);
             System.out.println("Server is running...");
+
+
+            while (!serverSocket.isClosed()) {
+                Socket localSocket = serverSocket.accept();
+            }
 
         } catch (IOException e) {
             e.printStackTrace();
