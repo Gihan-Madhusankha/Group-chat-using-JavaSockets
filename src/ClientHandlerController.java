@@ -1,5 +1,6 @@
 import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
 
 /**
  * @author : Gihan Madhusankha
@@ -7,6 +8,7 @@ import java.net.Socket;
  **/
 
 public class ClientHandlerController implements Runnable{
+    private static final ArrayList<ClientHandlerController> clientHandlerList = new ArrayList<>();
     Socket socket;
     BufferedReader bufferedReader;
     BufferedWriter bufferedWriter;
@@ -17,6 +19,7 @@ public class ClientHandlerController implements Runnable{
         this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
         this.clientUsername = bufferedReader.readLine();
+        clientHandlerList.add(this);
     }
 
     @Override
