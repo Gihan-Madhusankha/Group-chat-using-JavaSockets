@@ -9,10 +9,12 @@ import java.net.Socket;
 public class ClientHandlerController implements Runnable{
     Socket socket;
     BufferedReader bufferedReader;
+    BufferedWriter bufferedWriter;
 
     public ClientHandlerController(Socket socket) throws IOException {
         this.socket = socket;
         this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
     }
 
     @Override
