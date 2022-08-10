@@ -18,6 +18,11 @@ public class ServerFormController {
 
             while (!serverSocket.isClosed()) {
                 Socket localSocket = serverSocket.accept();
+                System.out.println("Client accepted...");
+
+
+
+
             }
 
         } catch (IOException e) {
