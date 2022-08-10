@@ -20,6 +20,7 @@ public class ServerFormController {
                 Socket localSocket = serverSocket.accept();
                 System.out.println("Client accepted...");
 
+                ClientHandlerController clientHandlerController = new ClientHandlerController(localSocket);
 
 
 
