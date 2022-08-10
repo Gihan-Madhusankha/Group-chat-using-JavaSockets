@@ -21,8 +21,7 @@ public class ServerFormController {
                 System.out.println("Client accepted...");
 
                 ClientHandlerController clientHandlerController = new ClientHandlerController(localSocket);
-
-
+                new Thread(clientHandlerController).start();
 
             }
 
