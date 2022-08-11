@@ -1,4 +1,4 @@
-import java.io.IOException;
+import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
 
@@ -8,6 +8,17 @@ import java.util.Scanner;
  **/
 
 public class ClientFormController {
+    Socket socket;
+    String username;
+    BufferedReader bufferedReader;
+    BufferedWriter bufferedWriter;
+
+    public ClientFormController(Socket socket) throws IOException {
+        this.socket = socket;
+        this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+        this.username = bufferedReader.readLine();
+    }
 
     public static void main(String[] args) {
 
@@ -17,6 +28,7 @@ public class ClientFormController {
             String username = scanner.nextLine();
 
             Socket socket = new Socket("localhost", 8000);
+            ClientFormController clientFormController = new ClientFormController(socket);
 
 
         } catch (IOException e) {
