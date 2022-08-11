@@ -40,6 +40,27 @@ public class ClientFormController {
 
     }
 
+    private void listenMessages(Socket socket) {
+
+        new Thread(()->{
+
+            String listenMsg;
+
+            while (socket.isConnected()){
+
+                try {
+                    listenMsg = bufferedReader.readLine();
+                    System.out.println(listenMsg);
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }).start();
+
+    }
+
     private void sendMessages(Socket socket) throws IOException {
         bufferedWriter.write(username);
         bufferedWriter.newLine();
