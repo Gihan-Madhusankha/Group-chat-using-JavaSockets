@@ -38,5 +38,20 @@ public class ClientHandlerController implements Runnable {
     @Override
     public void run() {
 
+        String readMsg;
+
+        while (socket.isConnected()) {
+
+            try {
+                readMsg = bufferedReader.readLine();
+                broadCastMessage(readMsg);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+
     }
 }
