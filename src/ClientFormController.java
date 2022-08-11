@@ -30,6 +30,7 @@ public class ClientFormController {
             Socket socket = new Socket("localhost", 8000);
             ClientFormController clientFormController = new ClientFormController(socket);
             clientFormController.sendMessages(socket);
+            clientFormController.listenMessages(socket);
 
 
         } catch (IOException e) {
