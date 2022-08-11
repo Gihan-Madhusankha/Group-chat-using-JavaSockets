@@ -29,12 +29,17 @@ public class ClientFormController {
 
             Socket socket = new Socket("localhost", 8000);
             ClientFormController clientFormController = new ClientFormController(socket);
+            clientFormController.sendMessages(socket);
 
 
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+
+    }
+
+    private void sendMessages(Socket socket) {
 
     }
 
