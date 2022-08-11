@@ -7,7 +7,7 @@ import java.util.ArrayList;
  * 2022-08-10 11:42 PM
  **/
 
-public class ClientHandlerController implements Runnable{
+public class ClientHandlerController implements Runnable {
     private static final ArrayList<ClientHandlerController> clientHandlerList = new ArrayList<>();
     Socket socket;
     BufferedReader bufferedReader;
@@ -20,6 +20,19 @@ public class ClientHandlerController implements Runnable{
         this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
         this.clientUsername = bufferedReader.readLine();
         clientHandlerList.add(this);
+        broadCastMessage("SERVER : " + clientUsername + " joined the group chat.");
+    }
+
+    private void broadCastMessage(String messageToAllClients) throws IOException {
+
+        for (ClientHandlerController clientHandler : clientHandlerList) {
+            if (clientHandler.clientUsername.equals(clientUsername)) {
+                clientHandler.bufferedWriter.write(messageToAllClients);
+                clientHandler.bufferedWriter.newLine();
+                clientHandler.bufferedWriter.flush();
+            }
+        }
+
     }
 
     @Override
