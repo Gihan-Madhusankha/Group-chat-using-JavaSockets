@@ -39,7 +39,18 @@ public class ClientFormController {
 
     }
 
-    private void sendMessages(Socket socket) {
+    private void sendMessages(Socket socket) throws IOException {
+        bufferedWriter.write(username);
+        bufferedWriter.newLine();
+        bufferedWriter.flush();
+
+        Scanner scanner = new Scanner(System.in);
+        while (socket.isConnected()) {
+            String sendMsg = scanner.nextLine();
+            bufferedWriter.write(username+" : "+ sendMsg);
+            bufferedWriter.newLine();
+            bufferedWriter.flush();
+        }
 
     }
 
