@@ -19,6 +19,7 @@ public class ClientHandlerController implements Runnable {
         this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
         this.clientUsername = bufferedReader.readLine();
+
         clientHandlerList.add(this);
         broadCastMessage("SERVER : " + clientUsername + " joined the group chat.");
     }
@@ -26,7 +27,7 @@ public class ClientHandlerController implements Runnable {
     private void broadCastMessage(String messageToAllClients) throws IOException {
 
         for (ClientHandlerController clientHandler : clientHandlerList) {
-            if (clientHandler.clientUsername.equals(clientUsername)) {
+            if (!clientHandler.clientUsername.equals(clientUsername)) {
                 clientHandler.bufferedWriter.write(messageToAllClients);
                 clientHandler.bufferedWriter.newLine();
                 clientHandler.bufferedWriter.flush();

@@ -8,16 +8,16 @@ import java.util.Scanner;
  **/
 
 public class ClientFormController {
-    Socket socket;
-    String username;
-    BufferedReader bufferedReader;
-    BufferedWriter bufferedWriter;
+    private final Socket socket;
+    private final String username;
+    private final BufferedReader bufferedReader;
+    private final BufferedWriter bufferedWriter;
 
-    public ClientFormController(Socket socket) throws IOException {
+    public ClientFormController(Socket socket, String username) throws IOException {
         this.socket = socket;
+        this.username = username;
         this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-        this.username = bufferedReader.readLine();
     }
 
     public static void main(String[] args) {
@@ -28,10 +28,10 @@ public class ClientFormController {
             String username = scanner.nextLine();
 
             Socket socket = new Socket("localhost", 8000);
-            ClientFormController clientFormController = new ClientFormController(socket);
-            clientFormController.sendMessages(socket);
-            clientFormController.listenMessages(socket);
 
+            ClientFormController client = new ClientFormController(socket, username);
+            client.sendMessages(socket);
+            client.listenMessages(socket);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -42,19 +42,21 @@ public class ClientFormController {
 
     private void listenMessages(Socket socket) {
 
-        new Thread(()->{
+        new Thread(() -> {
 
             String listenMsg;
 
-            while (socket.isConnected()){
+            while (socket.isConnected()) {
 
                 try {
                     listenMsg = bufferedReader.readLine();
                     System.out.println(listenMsg);
 
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+
             }
 
         }).start();
@@ -67,9 +69,10 @@ public class ClientFormController {
         bufferedWriter.flush();
 
         Scanner scanner = new Scanner(System.in);
+
         while (socket.isConnected()) {
             String sendMsg = scanner.nextLine();
-            bufferedWriter.write(username+" : "+ sendMsg);
+            bufferedWriter.write(username + " : " + sendMsg);
             bufferedWriter.newLine();
             bufferedWriter.flush();
         }

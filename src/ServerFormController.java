@@ -15,7 +15,6 @@ public class ServerFormController {
             ServerSocket serverSocket = new ServerSocket(8000);
             System.out.println("Server is running...");
 
-
             while (!serverSocket.isClosed()) {
                 Socket localSocket = serverSocket.accept();
                 System.out.println("Client accepted...");
