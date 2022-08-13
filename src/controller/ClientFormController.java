@@ -1,5 +1,10 @@
 package controller;
 
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
+
 import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
@@ -10,6 +15,9 @@ import java.util.Scanner;
  **/
 
 public class ClientFormController {
+    public AnchorPane clientContext;
+    public TextArea txtArea;
+    public TextField txtMessage;
     Socket socket;
     BufferedReader bufferedReader;
     BufferedWriter bufferedWriter;
@@ -83,4 +91,6 @@ public class ClientFormController {
 
     }
 
+    public void sendBtnOnAction(MouseEvent event) {
+    }
 }
