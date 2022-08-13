@@ -1,3 +1,5 @@
+package controller;
+
 import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
@@ -72,13 +74,10 @@ public class ClientFormController {
                     System.out.println(listenMsg);
 
                 } catch (IOException e) {
-                    System.out.println("catch of listen");
                     e.printStackTrace();
                 }
 
             }
-
-            System.out.println("listen()");
 
         }).start();
 
