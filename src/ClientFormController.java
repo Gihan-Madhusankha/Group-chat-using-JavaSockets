@@ -8,10 +8,10 @@ import java.util.Scanner;
  **/
 
 public class ClientFormController {
-    private final Socket socket;
-    private final String username;
-    private final BufferedReader bufferedReader;
-    private final BufferedWriter bufferedWriter;
+    Socket socket;
+    BufferedReader bufferedReader;
+    BufferedWriter bufferedWriter;
+    String username;
 
     public ClientFormController(Socket socket, String username) throws IOException {
         this.socket = socket;
@@ -22,21 +22,40 @@ public class ClientFormController {
 
     public static void main(String[] args) {
 
+
         try {
             Scanner scanner = new Scanner(System.in);
             System.out.print("Enter your username > ");
             String username = scanner.nextLine();
 
-            Socket socket = new Socket("localhost", 8000);
+            Socket socket = new Socket("localhost", 8624);
 
-            ClientFormController client = new ClientFormController(socket, username);
-            client.sendMessages(socket);
-            client.listenMessages(socket);
+            ClientFormController clientFormController = new ClientFormController(socket, username);
+            clientFormController.listenMessages(socket);
+            clientFormController.sendMessages(socket);
 
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+    }
+
+    private void sendMessages(Socket socket) throws IOException {
+        bufferedWriter.write(username);
+        bufferedWriter.newLine();
+        bufferedWriter.flush();
+
+        while (socket.isConnected()) {
+
+            Scanner scanner = new Scanner(System.in);
+
+            String sendMsg = scanner.nextLine();
+            bufferedWriter.write(sendMsg);
+            bufferedWriter.newLine();
+            bufferedWriter.flush();
+
+        }
+        System.out.println("send()");
 
     }
 
@@ -52,30 +71,16 @@ public class ClientFormController {
                     listenMsg = bufferedReader.readLine();
                     System.out.println(listenMsg);
 
-
                 } catch (IOException e) {
+                    System.out.println("catch of listen");
                     e.printStackTrace();
                 }
 
             }
 
+            System.out.println("listen()");
+
         }).start();
-
-    }
-
-    private void sendMessages(Socket socket) throws IOException {
-        bufferedWriter.write(username);
-        bufferedWriter.newLine();
-        bufferedWriter.flush();
-
-        Scanner scanner = new Scanner(System.in);
-
-        while (socket.isConnected()) {
-            String sendMsg = scanner.nextLine();
-            bufferedWriter.write(username + " : " + sendMsg);
-            bufferedWriter.newLine();
-            bufferedWriter.flush();
-        }
 
     }
 

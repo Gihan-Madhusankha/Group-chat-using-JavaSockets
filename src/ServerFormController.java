@@ -12,7 +12,7 @@ public class ServerFormController {
     public static void main(String[] args) {
 
         try {
-            ServerSocket serverSocket = new ServerSocket(8000);
+            ServerSocket serverSocket = new ServerSocket(8624);
             System.out.println("Server is running...");
 
             while (!serverSocket.isClosed()) {
