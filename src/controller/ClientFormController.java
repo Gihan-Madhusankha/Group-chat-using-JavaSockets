@@ -25,6 +25,7 @@ public class ClientFormController extends Thread implements Initializable {
     public TextArea txtArea;
     public TextField txtMessage;
     public Label lblUsername;
+    public ImageView imgSend;
     Socket socket;
     BufferedReader bufferedReader;
     PrintWriter printWriter;
@@ -45,6 +46,14 @@ public class ClientFormController extends Thread implements Initializable {
             printWriter = new PrintWriter(socket.getOutputStream(), true);
             this.start();
 
+            imgSend.setOnMouseClicked(event -> {
+                try {
+                    sendMessages();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -52,20 +61,15 @@ public class ClientFormController extends Thread implements Initializable {
 
     }
 
-    private void sendMessages(Socket socket) throws IOException {
-        printWriter.write(username);
-        printWriter.flush();
-//        bufferedWriter.newLine();
+    private void sendMessages() throws IOException {
+        String msg = txtMessage.getText();
+        printWriter.println(username + ": " + msg);
+        txtArea.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
+        txtArea.appendText("Me: " + msg + "\n");
+        txtMessage.clear();
 
-        while (socket.isConnected()) {
-
-//            Scanner scanner = new Scanner(System.in);
-
-            String sendMsg = txtMessage.getText();
-            printWriter.println(username + " : " + sendMsg);
-            txtArea.appendText("ME : " + sendMsg + "\n");
-            printWriter.flush();
-
+        if (msg.equalsIgnoreCase("BYE") || (msg.equalsIgnoreCase("logout"))) {
+            System.exit(0);
         }
 
     }
