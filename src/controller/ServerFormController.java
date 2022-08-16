@@ -3,6 +3,7 @@ package controller;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 
 /**
  * @author : Gihan Madhusankha
@@ -11,19 +12,23 @@ import java.net.Socket;
 
 public class ServerFormController {
 
+    public static final ArrayList<ClientHandlerController> clientList = new ArrayList<>();
+
     public static void main(String[] args) {
+        ServerSocket serverSocket;
+        Socket socket;
 
         try {
-            ServerSocket serverSocket = new ServerSocket(8624);
-            System.out.println("Server is running...");
+            serverSocket = new ServerSocket(8999);
 
-            while (!serverSocket.isClosed()) {
-                Socket localSocket = serverSocket.accept();
-                System.out.println("Client accepted...");
+            while(!serverSocket.isClosed()) {
+                System.out.println("Server is running...");
+                socket = serverSocket.accept();
+                System.out.println("client is Connected|");
 
-                ClientHandlerController clientHandlerController = new ClientHandlerController(localSocket);
-                new Thread(clientHandlerController).start();
-
+                ClientHandlerController clientThread = new ClientHandlerController(socket, clientList);
+                clientList.add(clientThread);
+                clientThread.start();
             }
 
         } catch (IOException e) {

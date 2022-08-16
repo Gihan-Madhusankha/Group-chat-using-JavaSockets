@@ -1,48 +1,52 @@
 package controller;
 
+import javafx.event.ActionEvent;
+import javafx.geometry.NodeOrientation;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.Scanner;
 
 /**
  * @author : Gihan Madhusankha
  * 2022-08-11 5:26 PM
  **/
 
-public class ClientFormController {
+public class ClientFormController implements Runnable{
     public AnchorPane clientContext;
     public TextArea txtArea;
     public TextField txtMessage;
+    public Label lblUsername;
+    ClientFormController clientFormController;
+
     Socket socket;
     BufferedReader bufferedReader;
-    BufferedWriter bufferedWriter;
+    PrintWriter printWriter;
     String username;
 
-    public ClientFormController(Socket socket, String username) throws IOException {
+    /*public ClientFormController(Socket socket, String username) throws IOException {
         this.socket = socket;
         this.username = username;
         this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-    }
+    }*/
 
-    public static void main(String[] args) {
 
+    public void initialize() {
 
         try {
-            Scanner scanner = new Scanner(System.in);
-            System.out.print("Enter your username > ");
-            String username = scanner.nextLine();
+            txtArea.setEditable(false);
+            username = LoginFormController.username;
+            lblUsername.setText(username);
 
-            Socket socket = new Socket("localhost", 8624);
+            socket = new Socket("localhost", 8624);
+            System.out.println(username);
+            bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            printWriter = new PrintWriter(socket.getOutputStream());
 
-            ClientFormController clientFormController = new ClientFormController(socket, username);
-            clientFormController.listenMessages(socket);
-            clientFormController.sendMessages(socket);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -51,46 +55,70 @@ public class ClientFormController {
     }
 
     private void sendMessages(Socket socket) throws IOException {
-        bufferedWriter.write(username);
-        bufferedWriter.newLine();
-        bufferedWriter.flush();
+        printWriter.write(username);
+        printWriter.flush();
+//        bufferedWriter.newLine();
 
         while (socket.isConnected()) {
 
-            Scanner scanner = new Scanner(System.in);
+//            Scanner scanner = new Scanner(System.in);
 
-            String sendMsg = scanner.nextLine();
-            bufferedWriter.write(sendMsg);
-            bufferedWriter.newLine();
-            bufferedWriter.flush();
+            String sendMsg = txtMessage.getText();
+            printWriter.println(username + " : " + sendMsg);
+            txtArea.appendText("ME : " + sendMsg + "\n");
+            printWriter.flush();
 
         }
-        System.out.println("send()");
+
+
+        /*String msg = txtMessage.getText();
+        printWriter.println(username + ": " + msg);
+        txtArea.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
+        txtArea.appendText("Me: " + msg + "\n");
+        txtMessage.setText("");
+
+        if (msg.equalsIgnoreCase("BYE") || (msg.equalsIgnoreCase("logout"))) {
+            System.exit(0);
+        }*/
+
+//        }
 
     }
 
-    private void listenMessages(Socket socket) {
+    @Override
+    public void run() {
 
-        new Thread(() -> {
 
-            String listenMsg;
-
-            while (socket.isConnected()) {
-
-                try {
-                    listenMsg = bufferedReader.readLine();
-                    System.out.println(listenMsg);
-
-                } catch (IOException e) {
-                    e.printStackTrace();
+        try {
+            while (true) {
+                String msg = bufferedReader.readLine();
+                String[] tokens = msg.split(" ");
+                String cmd = tokens[0];
+                System.out.println(cmd);
+                StringBuilder fulmsg = new StringBuilder();
+                for (int i = 1; i < tokens.length; i++) {
+                    fulmsg.append(tokens[i]);
                 }
-
+                System.out.println(fulmsg);
+                if (cmd.equalsIgnoreCase(username + ":")) {
+                    continue;
+                } else if (fulmsg.toString().equalsIgnoreCase("bye")) {
+                    break;
+                }
+                txtArea.appendText(msg + "\n");
             }
+            bufferedReader.close();
+            printWriter.close();
+            socket.close();
 
-        }).start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
-    public void sendBtnOnAction(MouseEvent event) {
+    public void sendBtnOnAction(ActionEvent actionEvent) throws IOException {
+        sendMessages(socket);
     }
+
 }

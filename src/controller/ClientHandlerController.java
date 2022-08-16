@@ -13,14 +13,14 @@ public class ClientHandlerController implements Runnable {
     private static final ArrayList<ClientHandlerController> clientList = new ArrayList<>();
     Socket localSocket;
     BufferedReader bufferedReader;
-    BufferedWriter bufferedWriter;
+    PrintWriter printWriter;
     String username;
 
     public ClientHandlerController(Socket localSocket) {
         try {
             this.localSocket = localSocket;
             this.bufferedReader = new BufferedReader(new InputStreamReader(localSocket.getInputStream()));
-            this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(localSocket.getOutputStream()));
+            this.printWriter = new PrintWriter(localSocket.getOutputStream(), true);
             this.username = bufferedReader.readLine();
             clientList.add(this);
             broadCastMessage("SERVER : " + username + " joined to group chat.");
@@ -34,18 +34,19 @@ public class ClientHandlerController implements Runnable {
 
         for (ClientHandlerController clientHandlerController : clientList) {
             if (!clientHandlerController.username.equals(username)) {
-                clientHandlerController.bufferedWriter.write(messageToAllClients);
-                clientHandlerController.bufferedWriter.newLine();
-                clientHandlerController.bufferedWriter.flush();
+                clientHandlerController.printWriter.println(messageToAllClients);
+                System.out.println(messageToAllClients);
+//                clientHandlerController.printWriter.newLine();
+                clientHandlerController.printWriter.flush();
             }
         }
-
     }
 
     @Override
     public void run() {
 
-        String msg;
+
+        /*String msg;
 
         while (localSocket.isConnected()) {
 
@@ -58,6 +59,30 @@ public class ClientHandlerController implements Runnable {
                 break;
             }
 
+        }*/
+
+        try {
+            String msg;
+            while ((msg = bufferedReader.readLine()) != null) {
+                if (msg.equalsIgnoreCase( "exit")) {
+                    break;
+                }
+                for (ClientHandlerController cl : clientList) {
+                    cl.printWriter.write(msg);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            try {
+                bufferedReader.close();
+                printWriter.close();
+                localSocket.close();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
     }
@@ -70,7 +95,8 @@ public class ClientHandlerController implements Runnable {
             broadCastMessage("SERVER > " + username + " has left the chat.");
 
             bufferedReader.close();
-            bufferedWriter.close();
+            printWriter.close();
+//            bufferedWriter.close();
             localSocket.close();
 
         } catch (IOException e) {
