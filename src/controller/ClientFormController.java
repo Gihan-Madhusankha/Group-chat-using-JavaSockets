@@ -93,6 +93,10 @@ public class ClientFormController extends Thread implements Initializable {
                 txtArea.appendText(msg + "\n");
             }
 
+            bufferedReader.close();
+            printWriter.close();
+            socket.close();
+
 
         } catch (Exception e) {
             e.printStackTrace();
