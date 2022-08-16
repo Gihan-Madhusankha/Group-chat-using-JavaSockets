@@ -39,10 +39,11 @@ public class ClientFormController extends Thread implements Initializable {
             username = LoginFormController.username;
             lblUsername.setText(username);
 
-            socket = new Socket("localhost", 8624);
-            System.out.println(username);
+            socket = new Socket("localhost", 8999);
+            System.out.println("Socket is connected with server!");
             bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            printWriter = new PrintWriter(socket.getOutputStream());
+            printWriter = new PrintWriter(socket.getOutputStream(), true);
+            this.start();
 
 
         } catch (IOException e) {
@@ -66,19 +67,6 @@ public class ClientFormController extends Thread implements Initializable {
             printWriter.flush();
 
         }
-
-
-        /*String msg = txtMessage.getText();
-        printWriter.println(username + ": " + msg);
-        txtArea.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
-        txtArea.appendText("Me: " + msg + "\n");
-        txtMessage.setText("");
-
-        if (msg.equalsIgnoreCase("BYE") || (msg.equalsIgnoreCase("logout"))) {
-            System.exit(0);
-        }*/
-
-//        }
 
     }
 
