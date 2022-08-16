@@ -10,27 +10,26 @@ import java.util.ArrayList;
  **/
 
 public class ClientHandlerController implements Runnable {
-    private static final ArrayList<ClientHandlerController> clientList = new ArrayList<>();
-    Socket localSocket;
-    BufferedReader bufferedReader;
-    PrintWriter printWriter;
-    String username;
 
-    public ClientHandlerController(Socket localSocket) {
+    private ArrayList<ClientHandlerController> clientList;
+    private Socket socket;
+    private BufferedReader bufferedReader;
+    private PrintWriter printWriter;
+
+
+    public ClientHandlerController(Socket localSocket, ArrayList<ClientHandlerController> clientList) {
         try {
-            this.localSocket = localSocket;
+            this.socket = localSocket;
+            this.clientList = clientList;
             this.bufferedReader = new BufferedReader(new InputStreamReader(localSocket.getInputStream()));
             this.printWriter = new PrintWriter(localSocket.getOutputStream(), true);
-            this.username = bufferedReader.readLine();
-            clientList.add(this);
-            broadCastMessage("SERVER : " + username + " joined to group chat.");
 
         } catch (IOException e) {
-            closeEverything();
+            e.printStackTrace();
         }
     }
 
-    private void broadCastMessage(String messageToAllClients) throws IOException {
+    /*private void broadCastMessage(String messageToAllClients) throws IOException {
 
         for (ClientHandlerController clientHandlerController : clientList) {
             if (!clientHandlerController.username.equals(username)) {
@@ -40,7 +39,7 @@ public class ClientHandlerController implements Runnable {
                 clientHandlerController.printWriter.flush();
             }
         }
-    }
+    }*/
 
     @Override
     public void run() {
