@@ -39,7 +39,7 @@ public class ClientFormController extends Thread implements Initializable {
             username = LoginFormController.username;
             lblUsername.setText(username);
 
-            socket = new Socket("localhost", 8999);
+            socket = new Socket("localhost", 8624);
             System.out.println("Socket is connected with server!");
             bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             printWriter = new PrintWriter(socket.getOutputStream(), true);
@@ -70,40 +70,33 @@ public class ClientFormController extends Thread implements Initializable {
 
     }
 
+
+
     @Override
     public void run() {
-
-
         try {
             while (true) {
                 String msg = bufferedReader.readLine();
                 String[] tokens = msg.split(" ");
                 String cmd = tokens[0];
-                System.out.println(cmd);
-                StringBuilder fulmsg = new StringBuilder();
+
+                StringBuilder fullMsg = new StringBuilder();
                 for (int i = 1; i < tokens.length; i++) {
-                    fulmsg.append(tokens[i]);
+                    fullMsg.append(tokens[i]);
                 }
-                System.out.println(fulmsg);
+
                 if (cmd.equalsIgnoreCase(username + ":")) {
                     continue;
-                } else if (fulmsg.toString().equalsIgnoreCase("bye")) {
+                } else if (fullMsg.toString().equalsIgnoreCase("bye")) {
                     break;
                 }
                 txtArea.appendText(msg + "\n");
             }
-            bufferedReader.close();
-            printWriter.close();
-            socket.close();
+
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-    }
-
-    public void sendBtnOnAction(ActionEvent actionEvent) throws IOException {
-        sendMessages(socket);
     }
 
 }
