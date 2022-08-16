@@ -9,7 +9,7 @@ import java.util.ArrayList;
  * 2022-08-10 11:42 PM
  **/
 
-public class ClientHandlerController implements Runnable {
+public class ClientHandlerController extends Thread {
 
     private ArrayList<ClientHandlerController> clientList;
     private Socket socket;
@@ -29,17 +29,6 @@ public class ClientHandlerController implements Runnable {
         }
     }
 
-    /*private void broadCastMessage(String messageToAllClients) throws IOException {
-
-        for (ClientHandlerController clientHandlerController : clientList) {
-            if (!clientHandlerController.username.equals(username)) {
-                clientHandlerController.printWriter.println(messageToAllClients);
-                System.out.println(messageToAllClients);
-//                clientHandlerController.printWriter.newLine();
-                clientHandlerController.printWriter.flush();
-            }
-        }
-    }*/
 
     @Override
     public void run() {
