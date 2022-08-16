@@ -2,6 +2,7 @@ package controller;
 
 import javafx.fxml.Initializable;
 import javafx.geometry.NodeOrientation;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -11,11 +12,9 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Path;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -33,7 +32,8 @@ public class ClientFormController extends Thread implements Initializable {
     public ImageView imgSend;
     public ImageView imgCamera;
     public FileChooser fileChooser;
-    public Path path;
+    public File path;
+    public boolean saveControl = false;
     Socket socket;
     BufferedReader bufferedReader;
     PrintWriter printWriter;
@@ -63,7 +63,10 @@ public class ClientFormController extends Thread implements Initializable {
             });
 
             imgCamera.setOnMouseClicked(event -> {
-
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                fileChooser = new FileChooser();
+                fileChooser.setTitle("Open Image");
+                this.path = fileChooser.showOpenDialog(stage);
 
             });
 
@@ -76,9 +79,9 @@ public class ClientFormController extends Thread implements Initializable {
 
     private void sendMessages() throws IOException {
         String msg = txtMessage.getText();
-        printWriter.println(username + ": " + msg);
+        printWriter.println(username + "    : " + msg);
         txtArea.setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
-        txtArea.appendText("Me: " + msg + "\n");
+        txtArea.appendText("Me  : " + msg + "\n");
         txtMessage.clear();
 
         if (msg.equalsIgnoreCase("BYE") || (msg.equalsIgnoreCase("logout"))) {
