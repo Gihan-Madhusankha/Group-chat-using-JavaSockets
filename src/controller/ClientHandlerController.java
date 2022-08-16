@@ -33,40 +33,21 @@ public class ClientHandlerController extends Thread {
     @Override
     public void run() {
 
-
-        /*String msg;
-
-        while (localSocket.isConnected()) {
-
-            try {
-                msg = bufferedReader.readLine();
-                broadCastMessage(msg);
-
-            } catch (IOException e) {
-                closeEverything();
-                break;
-            }
-
-        }*/
-
         try {
             String msg;
             while ((msg = bufferedReader.readLine()) != null) {
-                if (msg.equalsIgnoreCase( "exit")) {
-                    break;
-                }
                 for (ClientHandlerController cl : clientList) {
-                    cl.printWriter.write(msg);
+                    cl.printWriter.println(msg);
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
-        }
-        finally {
+
+        } finally {
             try {
                 bufferedReader.close();
                 printWriter.close();
-                localSocket.close();
+                socket.close();
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -75,22 +56,4 @@ public class ClientHandlerController extends Thread {
 
     }
 
-
-    public void closeEverything() {
-
-        try {
-            clientList.remove(this);
-            broadCastMessage("SERVER > " + username + " has left the chat.");
-
-            bufferedReader.close();
-            printWriter.close();
-//            bufferedWriter.close();
-            localSocket.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
-    }
 }
