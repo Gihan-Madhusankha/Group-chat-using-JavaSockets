@@ -1,6 +1,7 @@
 package controller;
 
 import javafx.event.ActionEvent;
+import javafx.fxml.Initializable;
 import javafx.geometry.NodeOrientation;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -9,13 +10,15 @@ import javafx.scene.layout.AnchorPane;
 
 import java.io.*;
 import java.net.Socket;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 /**
  * @author : Gihan Madhusankha
  * 2022-08-11 5:26 PM
  **/
 
-public class ClientFormController implements Runnable{
+public class ClientFormController extends Thread implements Initializable {
     public AnchorPane clientContext;
     public TextArea txtArea;
     public TextField txtMessage;
@@ -34,8 +37,8 @@ public class ClientFormController implements Runnable{
         this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
     }*/
 
-
-    public void initialize() {
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
 
         try {
             txtArea.setEditable(false);
