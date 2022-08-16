@@ -30,12 +30,6 @@ public class ClientFormController extends Thread implements Initializable {
     PrintWriter printWriter;
     String username;
 
-    /*public ClientFormController(Socket socket, String username) throws IOException {
-        this.socket = socket;
-        this.username = username;
-        this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-    }*/
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
