@@ -1,16 +1,21 @@
 package controller;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.geometry.NodeOrientation;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.shape.Path;
 import javafx.stage.FileChooser;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -26,6 +31,9 @@ public class ClientFormController extends Thread implements Initializable {
     public TextField txtMessage;
     public Label lblUsername;
     public ImageView imgSend;
+    public ImageView imgCamera;
+    public FileChooser fileChooser;
+    public Path path;
     Socket socket;
     BufferedReader bufferedReader;
     PrintWriter printWriter;
@@ -54,6 +62,11 @@ public class ClientFormController extends Thread implements Initializable {
                 }
             });
 
+            imgCamera.setOnMouseClicked(event -> {
+
+
+            });
+
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -73,7 +86,6 @@ public class ClientFormController extends Thread implements Initializable {
         }
 
     }
-
 
 
     @Override
@@ -107,4 +119,16 @@ public class ClientFormController extends Thread implements Initializable {
         }
     }
 
+    public void textField_keyReleased(KeyEvent keyEvent) {
+
+        if (keyEvent.getCode().equals(KeyCode.ENTER)) {
+            try {
+                sendMessages();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
 }
