@@ -1,15 +1,23 @@
 package controller;
 
+import javafx.application.Platform;
 import javafx.fxml.Initializable;
 import javafx.geometry.NodeOrientation;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -32,6 +40,9 @@ public class ClientFormController extends Thread implements Initializable {
     public ImageView imgCamera;
     public FileChooser fileChooser;
     public File path;
+    public TextFlow emojiList;
+    public ImageView btnEmoji;
+    public VBox chatBox;
     Socket socket;
     BufferedReader bufferedReader;
     PrintWriter printWriter;
@@ -65,6 +76,17 @@ public class ClientFormController extends Thread implements Initializable {
                 fileChooser = new FileChooser();
                 fileChooser.setTitle("Open Image");
                 this.path = fileChooser.showOpenDialog(stage);
+            });
+
+            for (Node text : emojiList.getChildren()) {
+                text.setOnMouseClicked(event -> {
+                    txtMessage.setText(txtMessage.getText() + " " + ((Text) text).getText());
+                    emojiList.setVisible(false);
+                });
+            }
+
+            btnEmoji.setOnMouseClicked(event -> {
+                emojiList.setVisible(!emojiList.isVisible());
             });
 
 
@@ -114,6 +136,7 @@ public class ClientFormController extends Thread implements Initializable {
             socket.close();
 
 
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -131,4 +154,5 @@ public class ClientFormController extends Thread implements Initializable {
         }
 
     }
+
 }
